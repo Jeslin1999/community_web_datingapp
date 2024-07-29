@@ -3,7 +3,6 @@
 {% load static %}
 {% block content %}
 <style>
-
     .user-card {
         margin-bottom: 20px;
     }
@@ -17,54 +16,79 @@
     .card-title {
         font-size: 1.25rem;
         font-weight: bold;
+        margin-bottom: 0.5rem;
     }
 
     .card-text {
         font-size: 1rem;
+        color: #666;
+    }
+
+    .btn {
+        margin-right: 10px;
+        margin-bottom: 20px;
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn:hover {
+        color: #ffffff;
+        background-color: #f8181b;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    @media (max-width: 768px) {
+        .col-md-3 {
+            flex: 1 0 calc(50% - 20px);
+            margin-bottom: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .col-md-3 {
+            flex: 1 0 100%;
+            margin-bottom: 20px;
+        }
     }
 </style>
-<div class="container  mt-4">
+<div class="container mt-4">
     <div class="row">
-        <div class="col-2">
+        <div class="col-md-2">
             {% include 'Dating/shared/side.html' %}
         </div>
-    <div class="col-10">
-
-
-        <a class="btn btn-primary" type="submit" href="{% url 'Dating:gridview' %}">All</a>
-
-        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:locationgridview' %}">Location</a>
-
-        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:educationgridview' %}">Education</a>
-
-        <a class="btn btn-primary" type="submit"  href="">Profession</a>
-
-        <h1>All Users Details</h1>
-        <div class="row">
-
-            {% for user in users %}
-            <div class="col-md-3 user-card">
-                <div class="card h-100">
-                    <a class="navbar-brand" href="{% url 'Dating:user_detail' user.id %}">
-                        {% if user.images %}
-                        <img src="{{ user.images.url }}" class="card-img-top" alt="" >
-                        {% else %}
-                        <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top"
-                            alt="Default profile picture">
-                        {% endif %}
-                        <div class="card-body h-50">
-                            <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-                            <p class="card-text">{{ user.age }}</p>
-                            <p> {{ user.username }}</p>
+        <div class="col-md-10">
+            <div class="d-flex mb-3">
+                <a class="btn" type="submit" href="{% url 'Dating:gridview' %}">All</a>
+                <a class="btn" type="submit" href="{% url 'Dating:locationgridview' %}">Location</a>
+                <a class="btn" type="submit" href="{% url 'Dating:educationgridview' %}">Education</a>
+            </div>
+            <h1>All Users Details</h1>
+            <div class="card p-4 w-100">
+                <div class="row">
+                    {% for user in users %}
+                    <div class="col-md-3 user-card">
+                        <div class="card h-100">
+                            <a class="navbar-brand" href="{% url 'Dating:user_detail' user.id %}">
+                                {% if user.images %}
+                                <img src="{{ user.images.url }}" class="card-img-top" alt="">
+                                {% else %}
+                                <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top" alt="Default profile picture">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                                    <p class="card-text">{{ user.age }}</p>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
         </div>
-        
-
     </div>
-</div>
 </div>
 {% endblock content %}

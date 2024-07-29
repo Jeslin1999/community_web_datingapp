@@ -1,28 +1,31 @@
-{% extends 'shared/basea.html' %}
+{% extends 'shared/base.html' %}
 
-  
-
-{% block content %} 
+{% block content %}
 <script>
     function toggleForm(formType) {
         document.getElementById('employee_form').style.display = formType === 'employee' ? 'block' : 'none';
         document.getElementById('jobseeker_form').style.display = formType === 'jobseeker' ? 'block' : 'none';
     }
 </script>
-    <h1>Profession</h1>
-    <button class="btn btn-success" onclick="toggleForm('employee')">Employee</button>
-    <button class="btn btn-success" onclick="toggleForm('jobseeker')">Jobseeker</button>
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card p-4 w-100 w-md-50">
+        <h1 class="text-center">Profession</h1>
+        <div class="my-3 text-center">
+            <button class="btn btn-success mx-2" onclick="toggleForm('employee')">Employee</button>
+            <button class="btn btn-success mx-2" onclick="toggleForm('jobseeker')">Jobseeker</button>
+        </div>
 
-    <form class="mt-3" method="post" id="employee_form" style="display: none;">
-        {% csrf_token %}
-        {{ employee_form.as_p }}
-        <button class="btn btn-success" type="submit" name="employee_submit">Save & Next</button>
-    </form>
+        <form class="mt-3" method="post" id="employee_form" style="display: none;">
+            {% csrf_token %}
+            {{ employee_form.as_p }}
+            <button class="btn btn-success mt-3" type="submit" name="employee_submit">Save & Next</button>
+        </form>
 
-    <form method="post" id="jobseeker_form" style="display: none;">
-        {% csrf_token %}
-        {{ jobseeker_form.as_p }}
-        <button class="btn btn-success" type="submit" name="jobseeker_submit">Save & Next</button>
-    </form>
-    {% endblock content %} 
-
+        <form method="post" id="jobseeker_form" style="display: none;">
+            {% csrf_token %}
+            {{ jobseeker_form.as_p }}
+            <button class="btn btn-success mt-3" type="submit" name="jobseeker_submit">Save & Next</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

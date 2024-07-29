@@ -1,14 +1,16 @@
 {% extends 'shared/base.html' %}
 
-  
 
-{% block content %} 
-<div class="container">
-    <h1>Select Gender</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-secondary" type="submit">Submit</button>
-    </form>
+
+{% block content %}
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card p-4 w-50">
+        <h1>Select Gender</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-secondary" type="submit">Submit</button>
+        </form>
+    </div>
 </div>
-{% endblock content %} 
+{% endblock content %}

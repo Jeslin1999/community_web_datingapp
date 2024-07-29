@@ -18,6 +18,8 @@ urlpatterns = [
     path('profile/update/<int:id>/',ProfileUpdateView.as_view(),name='profile_update'),
     path('profile/delete/<int:id>/',ProfileDeleteView.as_view(),name='profile_delete'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('packages/', PaymentOptionsView.as_view(), name='packages'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

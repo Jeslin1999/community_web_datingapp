@@ -7,7 +7,7 @@ from .models import Employee, Jobseeker, User, EmailOTP
 class LoginForm(AuthenticationForm):
     username = CharField(
         max_length = 15,
-        min_length = 4,
+        min_length = 3,
         label = 'Username',
         required = True,
         widget = TextInput({
@@ -33,13 +33,46 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['images','username','password','first_name','last_name','email','dob','phone','gender','location','bio','interest','qualification','rel_status','smoke','drinking']
-
+        widgets = {
+            'images': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+            'interest': forms.Textarea(attrs={'class': 'form-control'}),
+            'qualification': forms.TextInput(attrs={'class': 'form-control'}),
+            'rel_status': forms.Select(attrs={'class': 'form-control'}),
+            'smoke': forms.Select(attrs={'class': 'form-control'}),
+            'drinking': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 class UpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['images','first_name','last_name','email','dob','phone','gender','location','bio','interest','qualification','rel_status','smoke','drinking']
-
+        widgets = {
+            'images': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+            'interest': forms.Textarea(attrs={'class': 'form-control'}),
+            'qualification': forms.TextInput(attrs={'class': 'form-control'}),
+            'rel_status': forms.Select(attrs={'class': 'form-control'}),
+            'smoke': forms.Select(attrs={'class': 'form-control'}),
+            'drinking': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 class EmailForm(forms.ModelForm):
     class Meta:

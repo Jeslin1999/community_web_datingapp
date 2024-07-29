@@ -11,6 +11,7 @@
         width: 100%;
         height: auto;
         object-fit: cover;
+        border-radius: 5px 5px 0 0;
     }
 
     .card-title {
@@ -20,51 +21,89 @@
 
     .card-text {
         font-size: 1rem;
+        color: #666;
+    }
+
+    .btn:hover {
+        background-color: rgb(245, 63, 63);
+    }
+
+    .btn-success {
+        margin-right: 10px;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    @media (max-width: 768px) {
+        .col-md-3 {
+            flex: 1 0 calc(50% - 20px);
+            margin-bottom: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .col-md-3 {
+            flex: 1 0 100%;
+            margin-bottom: 20px;
+        }
     }
 </style>
-<div class="container">
-
+<div class="container mt-4">
     <div class="row">
         <div class="col-2">
             {% include 'Dating/shared/side.html' %}
         </div>
         <div class="col-10">
-
             {% if count > 0 %}
             <p>You have {{ count }} pending friend request(s).</p>
-
-            {% for request in pending_requests %}
-
-            <div class="col-md-3 user-card">
-                <div class="card h-100">
-                    <a class="navbar-brand" href="{% url 'Dating:user_detail' user.id %}">
-                        {% if request.send_by.images %}
-                        <img src="{{ request.send_by.images.url }}" class="card-img-top" alt="">
-                        {% else %}
-                        <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top"
-                            alt="Default profile picture">
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ request.send_by.first_name }} {{ request.send_by.lastname }}</h5>
-                            <p class="card-text">{{ request.send_by.age }}</p>
-                            <p> {{ request.send_by.username }}</p>
+            <div class="row">
+                {% for request in pending_requests %}
+                <div class="col-md-3 user-card">
+                    <div class="card h-100">
+                        <a class="navbar-brand" href="{% url 'Dating:user_detail' request.send_by.id %}">
+                            {% if request.send_by.images %}
+                            <img src="{{ request.send_by.images.url }}" class="card-img-top" alt="">
+                            {% else %}
+                            <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top"
+                                alt="Default profile picture">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ request.send_by.first_name }} {{ request.send_by.last_name }}</h5>
+                                <p class="card-text">{{ request.send_by.age }}</p>
+                            </div>
+                        </a>
+                        <div class="btn-group">
+                            <form method="post" action="{% url 'Dating:accept_request' request.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-success">Accept</button>
+                            </form>
+                            <form method="post" action="{% url 'Dating:reject_request' request.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Reject</button>
+                            </form>
                         </div>
-                    </a>
-                    <span class="d-inline-block">
-                        <form method="post" action="{% url 'Dating:accept_request' request.id %}">
-                            {% csrf_token %}
-                            <button class="btn btn-success" style="display:inline;">Accept</button>
-                        </form>
-                        <form method="post" action="{% url 'Dating:reject_request' request.id %}">
-                            {% csrf_token %}
-                            <button class="btn btn-danger" onclick="return confirm('Are you sure?')"
-                                style="display:inline;">Reject</button>
-                        </form>
-                    </span>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-
             {% else %}
             <p>No pending friend requests.</p>
             {% endif %}

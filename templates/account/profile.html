@@ -1,36 +1,81 @@
 {% extends 'shared/base.html' %}
 
+{% block styles %}
+<style>
+    .profile-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .profile-header img {
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+    .profile-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0;
+    }
+    .profile-details {
+        margin-top: 20px;
+    }
+    .profile-details p {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    .profile-actions {
+        margin-top: 20px;
+    }
+    .profile-actions .btn {
+        margin-right: 10px;
+    }
+</style>
+{% endblock styles %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">
-        <div class="col-2">
+        <div class="col-md-3">
             {% include 'Dating/shared/side.html' %}
         </div>
-        <div class="col-10">
- 
-        <img src="{{ user.images.url }}" width="200" height="200" alt="{{ user.username }}'s profile image">
-        <h1>{{ user.username }}</h1>
-        <p>{{ user.email }}</p>
-        <p>{{ user.dob }}</p>
-        <p>{{ user.interest }}</p>
-        <p>{{ user.qualification }}</p>
-        <p>{{ user.location }}</p>
-        <p>{{ user.gender }}</p>
-        <p>{{ user.smoke }}</p>
-        <p>{{ user.drinking }}</p>
-        {% if user.employee_details %}
-        <h3>Employee Details</h3>
-        <p>Job Title: {{ user.employee_details.position }}</p>
-        {% endif %}
+        <div class="col-md-9">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <img src="{{ user.images.url }}" width="200" height="200" alt="{{ user.username }}'s profile image">
+                    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                </div>
+                <div class="profile-details">
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
+                    <p><strong>Interests:</strong> {{ user.interest }}</p>
+                    <p><strong>Qualification:</strong> {{ user.qualification }}</p>
+                    <p><strong>Location:</strong> {{ user.location }}</p>
+                    <p><strong>Gender:</strong> {{ user.gender }}</p>
+                    <p><strong>Smoking:</strong> {{ user.smoke }}</p>
+                    <p><strong>Drinking:</strong> {{ user.drinking }}</p>
+                    {% if user.employee_details %}
+                    <h3>Employee Details</h3>
+                    <p><strong>Job Title:</strong> {{ user.employee_details.position }}</p>
+                    {% endif %}
 
-        {% if user.jobseeker_details %}
-        <h3>Job Seeker Details</h3>
-        <p>Resume: {{ user.jobseeker_details.title }}</p>
-        {% endif %}
-
-        <a class="btn btn-secondary" href="{% url 'account:profile_update' user.id %}">Edit Profile</a>   
-        <a class="btn btn-danger" href="{% url 'account:profile_delete' user.id %}" onclick="return confirm('Are you sure?')">Account delete</a>
+                    {% if user.jobseeker_details %}
+                    <h3>Job Seeker Details</h3>
+                    <p><strong>Resume:</strong> {{ user.jobseeker_details.title }}</p>
+                    {% endif %}
+                </div>
+                <div class="profile-actions">
+                    <a class="btn btn-secondary" href="{% url 'account:profile_update' user.id %}">Edit Profile</a>
+                    <a class="btn btn-danger" href="{% url 'account:profile_delete' user.id %}"
+                        onclick="return confirm('Are you sure?')">Delete Account</a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </div>
 {% endblock content %}

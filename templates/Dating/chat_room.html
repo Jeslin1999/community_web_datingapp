@@ -1,143 +1,71 @@
 {% extends 'shared/base.html' %}
-{% block styles %}
-<style>
-    /* Global styles */
-    body {
-        background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
-    }
-    .container {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-    }
-    h2 {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-    }
-    .form-group {
-        margin-bottom: 20px;
-    }
-    .btn-primary {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-    .messages {
-        margin-top: 30px;
-    }
-
-    /* Message item styles */
-    .message {
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        background-color: #f0f0f0;
-    }
-    .message .sender {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-    .message .content {
-        font-size: 1rem;
-        margin-bottom: 8px;
-    }
-    .message .timestamp {
-        font-size: 0.8rem;
-        color: #888;
-    }
-
-    /* Different styling for sent and received messages */
-    .message.sent {
-        background-color: #d3f7dc; /* Light green for sent messages */
-        align-self: flex-end; /* Align to the right */
-    }
-    .message.sent .content {
-        text-align: right; /* Align content to the right */
-    }
-    .message.received {
-        background-color: #f0f0f0; /* Light grey for received messages */
-        align-self: flex-start; /* Align to the left */
-    }
-    .message.received .content {
-        text-align: left; /* Align content to the left */
-    }
-
-    /* Styling for message form */
-    .message-form {
-        margin-top: 30px;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-    }
-    .message-form textarea {
-        width: 100%;
-        height: 100px;
-        resize: vertical;
-        padding: 10px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-</style>
-{% endblock styles %}
+{% load static %}
 
 {% block content %}
-<div class="container">
-    <div class="messages">
-        <h3>Received Messages</h3>
-        {% if received_messages %}
-            {% for message in received_messages %}
-            <div class="message received">
-                <div class="sender"> {{ message.receiver.username }}</div>
-                <div class="content">{{ message.content }}</div>
-                <div class="timestamp">{{ message.timestamp }}</div>
+<style>
+    .message-container {
+        max-height: 500px;
+        overflow-y: scroll;
+        margin-bottom: 20px;
+    }
+
+    .message {
+        margin-bottom: 10px;
+    }
+
+    .message .content {
+        padding: 10px;
+        border-radius: 5px;
+        max-width: 75%;
+    }
+
+    .message .sent .content {
+        background-color: #e1ffc7;
+        margin-left: auto;
+    }
+
+    .message .received .content {
+        background-color: #f1f0f0;
+    }
+
+    .message-form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .message-form textarea {
+        flex: 1;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="container mt-4">
+    <a class="btn btn-secondary" type="submit" href="{% url 'Dating:gridview' %}">Back</a>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Chat with {{ receiver.first_name }} {{ receiver.last_name }}</h2>
+
+            <div class="message-container">
+                {% for message in messages %}
+                <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
+                    <div class="content" style="background-color: rgb(203, 207, 210);">
+                        <p>{{ message.content }}</p>
+                        <small class="text-muted">{{ message.timestamp }}</small>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No messages yet.</p>
+                {% endfor %}
             </div>
-            {% empty %}
-                <p>No messages received.</p>
-            {% endfor %}
-        {% else %}
-            <p>No messages received.</p>
-        {% endif %}
-    </div>
 
-    <hr>
-
-    <div class="messages">
-        <h3>Sent Messages</h3>
-        {% if sent_messages %}
-        {% for message in sent_messages %}
-            <div class="message sent">
-                <div class="sender">{{ message.sender.username }}</div>
-                <div class="content">{{ message.content }}</div>
-                <div class="timestamp">{{ message.timestamp }}</div>
-            </div>
-            {% empty %}
-                <p>No messages sent.</p>
-            {% endfor %}
-        {% else %}
-            <p>No messages sent.</p>
-        {% endif %}
-    </div>
-
-    <div class="message-form">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
+            <form method="post" class="message-form">
+                {% csrf_token %}
                 {{ form.as_p }}
-            </div>
-            <button type="submit" class="btn btn-primary">Send</button>
-        </form>
+                <button class="btn btn-primary" type="submit">Send</button>
+            </form>
+        </div>
     </div>
 </div>
+
 {% endblock content %}

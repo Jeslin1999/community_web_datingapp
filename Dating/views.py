@@ -132,31 +132,6 @@ class EducationGridview(LoginRequiredMixin, ListView):
         return queryset
                
 
-
-class AllGridview(LoginRequiredMixin,ListView):
-    model = User, Genderselect
-    template_name = 'Dating/all_users.html'
-    context_object_name = 'users'
-
-    def get_queryset(self):
-        gender_selection = Genderselect.objects.filter(user=self.request.user.id).first()
-        if gender_selection:
-                if gender_selection.genderselect == 'B':
-                    return User.objects.all().exclude(id=self.request.user.id)
-
-                elif gender_selection.genderselect == 'M':
-                    return User.objects.filter(gender='Male').exclude(id=self.request.user.id)
-
-                elif gender_selection.genderselect == 'F':
-                    return User.objects.filter(gender='Female').exclude(id=self.request.user.id)
-                
-                queryset = queryset.prefetch_related('employee', 'jobseeker')
-            
-                return queryset
-        
-        return User.objects.none()
-    
-
 class UserDetailView(DetailView):
     model = User
     template_name = 'Dating/user_detail.html'
@@ -225,6 +200,18 @@ class SendhtmlView(View):
                 friends_list.append(friend.send_by)
         context = {'friends': friends_list}
         return render(request, 'Dating/friends_list.html', context)
+
+class RemovelistView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        send_to_user = get_object_or_404(User, id=self.kwargs['user_id'])
+        friend_connection = get_object_or_404(
+            Friendconnection,
+            Q(send_by=self.request.user, send_to=send_to_user, status=False) | 
+            Q(send_by=self.request.user, send_to=send_to_user, short_list=True) |
+            Q(send_by=self.request.user, send_to=send_to_user, status=True)
+        )
+        friend_connection.delete()
+        return redirect(reverse_lazy('Dating:gridview'))
     
 
 class Accepthtmlview(LoginRequiredMixin, TemplateView):
@@ -340,21 +327,29 @@ class SendMessageView(LoginRequiredMixin, CreateView):
 
     def get(self, request, id):
         receiver = get_object_or_404(User, id=id)
-        received_messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
-        sent_messages = Message.objects.filter(sender=request.user, receiver=receiver).order_by('-timestamp')
+        
+
+        messages_between = Message.objects.filter(
+            (Q(sender=request.user) & Q(receiver=receiver)) |
+            (Q(sender=receiver) & Q(receiver=request.user))
+        ).order_by('-timestamp')
+
         form = MessageForm()
         context = {
             'form': form,
             'receiver': receiver,
-            'received_messages': received_messages,
-            'sent_messages': sent_messages,
+            'messages': messages_between,
         }
         return render(request, self.template_name, context)
 
     def post(self, request, id):
         receiver = get_object_or_404(User, id=id)
-        received_messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
-        sent_messages = Message.objects.filter(sender=request.user, receiver=receiver).order_by('-timestamp')
+        
+        messages_between = Message.objects.filter(
+            (Q(sender=request.user) & Q(receiver=receiver)) |
+            (Q(sender=receiver) & Q(receiver=request.user))
+        ).order_by('-timestamp')
+
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
@@ -362,11 +357,11 @@ class SendMessageView(LoginRequiredMixin, CreateView):
             message.receiver = receiver
             message.save()
             messages.success(request, 'Message sent successfully.')
-            return redirect('Dating:send_message', id=id)  # Redirect to the send_message page with id
+            return redirect('Dating:send_message', id=id) 
+
         context = {
             'form': form,
             'receiver': receiver,
-            'received_messages': received_messages,
-            'sent_messages': sent_messages,
+            'messages': messages_between,
         }
         return render(request, self.template_name, context)

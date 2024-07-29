@@ -1,28 +1,66 @@
 {% block content %}
 <style>
+    .sidebar {
+        position: relative;
+        width: 250px;
+    }
 
+    .dropdown-item {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #000;
+    }
+
+    .dropdown-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .dropdownmenu {
+        display: none;
+    }
+
+    .dropdownmenu.show {
+        display: block;
+    }
+
+    .sidebar-header {
+        cursor: pointer;
+        padding: 10px;
+    }
 </style>
+
 <div class="container">
     <div class="row">
-        <div class="col-2">
-            <a class="dropdown-item" href="{% url 'Dating:gridview' %}">Home</a>
-            <hr class="border border-1 border-danger">
-            <a class="dropdown-item" href="{% url 'account:profile' %}">Profile</a>
-            <hr>
-            <a class="dropdown-item" href="{% url 'Dating:gallery' %}">Gallery</a>
-            <hr>
-            <a class="dropdown-item text-dark " href="{% url 'Dating:send_html' %}">Send interest</a>
-            <hr>
-            <a class="dropdown-item text-dark " href="{% url 'Dating:accept_requests' %}">Received interest</a>
-            <hr>
-            <a class="dropdown-item text-dark " href=" {% url 'Dating:friends_list' %}">Friends List</a>
-            <hr>
-            <a class="dropdown-item text-dark " href="{% url 'Dating:short_html' %}">Favorited</a>
-            <hr>
-            <a class="dropdown-item text-danger " href="{% url 'account:logout' %}">Logout</a>
-
+        <div class="col-2 sidebar">
+            <div class="sidebar-header" id="menuToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-align-justify"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+            </div>
+            <div class="dropdownmenu">
+                <a class="dropdown-item" href="{% url 'Dating:gridview' %}">Home</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item" href="{% url 'account:profile' %}">Profile</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item" href="{% url 'Dating:gallery' %}">Gallery</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item text-dark" href="{% url 'Dating:send_html' %}">Send interest</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item text-dark" href="{% url 'Dating:accept_requests' %}">Received interest</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item text-dark" href="{% url 'Dating:friends_list' %}">Friends List</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item text-dark" href="{% url 'Dating:short_html' %}">Favorited</a>
+                <hr class="border border-1 border-danger">
+                <a class="dropdown-item text-danger" href="{% url 'account:logout' %}">Logout</a>
+            </div>
         </div>
-
     </div>
 </div>
+
+<script>
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        const menu = document.querySelector('.dropdownmenu');
+        menu.classList.toggle('show');
+    });
+</script>
 {% endblock content %}

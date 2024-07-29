@@ -54,28 +54,12 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.set_password(form.cleaned_data['password1'])
+        user.set_password(form.cleaned_data['password'])
         user.is_email_verified = True
         user.save()
         login(self.request, user)
         return redirect('account:employeeinfo')
         
-    
-    
-# class RegisterLogin(FormView):
-#     template_name = 'account/conformup.html'
-#     form_class = LoginForm
-
-#     def form_valid(self, form):
-#         username = form.cleaned_data['username']
-#         password = form.cleaned_data['password']
-#         user = authenticate(self.request, username=username, password=password)
-
-#         if user is not None and user.is_email_verified:
-#                 login(self.request, user)
-#                 return redirect('account:employeeinfo')
-#         else:
-#             return self.form_invalid(form)
 
 class EmployeeinfoView(LoginRequiredMixin,View):
     def get(self, request):
@@ -178,5 +162,9 @@ class LogoutView(TemplateView):
         logout(request)
         request.session.flush()
         return redirect(reverse_lazy('Dating:login'))
+   
+
+class PaymentOptionsView(TemplateView):
+    template_name = 'account/packages.html'
     
         

@@ -1,82 +1,146 @@
 {% extends 'shared/base.html' %}
+{% load static %}
+
+{% block styles %}
+<style>
+    .profile-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-header img {
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+
+    .profile-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0;
+    }
+
+    .profile-details {
+        margin-top: 20px;
+    }
+
+    .profile-details p {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .profile-actions {
+        margin-top: 20px;
+    }
+
+    .profile-actions .btn {
+        margin-right: 10px;
+    }
+
+    .btn:hover {
+        background-color: rgb(0, 255, 140);
+    }
+
+    .gallery {
+        margin-top: 30px;
+    }
+
+    .gallery .card {
+        margin-bottom: 20px;
+    }
+
+    .gallery img,
+    .gallery video {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+</style>
+{% endblock styles %}
 
 {% block content %}
-
-
-
 <div class="container mt-4">
     <div class="row">
         <div class="col-2">
             {% include 'Dating/shared/side.html' %}
         </div>
-        <div class="col-10">
-
-            <form method="post" action="{% url 'Dating:send_request' user.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Send Interest</button>
-
-                
-            </form>
-            <form method="post" action="{% url 'Dating:send_message' user.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Message</button>
-            </form>
-            <form method="post" action="{% url 'Dating:short_list' request_id=user.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Favorite</button>
-            </form>
-            <form method="post" action="{% url 'Dating:not_interest' request_id=user.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Not Interested</button>
-            </form>
-    
-    <h3>Gallery</h3>
-    <div class="row">
-        {% if user.media_details %}
-        {% for media in user.media_details %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                {% if media.media_type == 'image' %}
-                <img src="{{ media.file.url }}" class="card-img-top" alt="Media Image">
-                {% elif media.media_type == 'video' %}
-                <video controls class="card-img-top">
-                    <source src="{{ media.file.url }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                {% endif %}
-                <div class="card-body">
-                    <small class="text-muted">{{ media.timestamp }}</small>
+        <div class="col-10  justify-content-center">
+            <div class="profile-actions">
+                <form method="post" action="{% url 'Dating:send_request' user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn border border-2 border-danger" type="submit">Send Interest</button>
+                </form>
+                <form method="post" action="{% url 'Dating:send_message' user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn border border-2 border-danger" type="submit">Message</button>
+                </form>
+                <form method="post" action="{% url 'Dating:short_list' request_id=user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn border border-2 border-danger" type="submit">Favorite</button>
+                </form>
+                <form method="post" action="{% url 'Dating:not_interest' request_id=user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn border border-2 border-danger" type="submit">Not Interested</button>
+                </form>
+            </div>
+            <div class="profile-container mt-3">
+                <div class="profile-header">
+                    <img src="{{ user.images.url }}" width="200" alt="{{ user.username }}'s profile image">
+                    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
                 </div>
+                <div class="profile-details">
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
+                    <p><strong>Interest:</strong> {{ user.interest }}</p>
+                    <p><strong>Qualification:</strong> {{ user.qualification }}</p>
+                    <p><strong>Location:</strong> {{ user.location }}</p>
+                    <p><strong>Gender:</strong> {{ user.gender }}</p>
+                    <p><strong>Smokes:</strong> {{ user.smoke }}</p>
+                    <p><strong>Drinks:</strong> {{ user.drinking }}</p>
+                    {% if user.employee_details %}
+                    <h3>Employee Details</h3>
+                    <p><strong>Job Title:</strong> {{ user.employee_details.position }}</p>
+                    {% endif %}
+                    {% if user.jobseeker_details %}
+                    <h3>Job Seeker Details</h3>
+                    <p><strong>Resume:</strong> {{ user.jobseeker_details.title }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="gallery">
+                    <h3>Gallery</h3>
+                    <div class="row">
+                        {% if user.media_details %}
+                        {% for media in user.media_details %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                {% if media.media_type == 'image' %}
+                                <img src="{{ media.file.url }}" class="card-img-top" alt="Media Image">
+                                {% elif media.media_type == 'video' %}
+                                <video controls class="card-img-top">
+                                    <source src="{{ media.file.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                {% endif %}
+                                <div class="card-body">
+                                    <small class="text-muted">{{ media.timestamp }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <a href="{% url 'Dating:gridview' %}" class="btn btn-secondary mt-3">Back to list</a>
             </div>
         </div>
-        {% endfor %}
-    </div>
-
-    {% endif %}
-    <div>
-        <img src="{{ user.images.url }}" width="200" alt="{{ user.username }}'s profile image">
-        <h1>{{ user.username }}</h1>
-        <p>{{ user.email }}</p>
-        <p>{{ user.dob }}</p>
-        <p>{{ user.interest }}</p>
-        <p>{{ user.qualification }}</p>
-        <p>{{ user.location }}</p>
-        <p>{{ user.gender }}</p>
-        <p>{{ user.smoke }}</p>
-        <p>{{ user.drinking }}</p>
-        {% if user.employee_details %}
-        <h3>Employee Details</h3>
-        <p>Job Title: {{ user.employee_details.position }}</p>
-        {% endif %}
-
-        {% if user.jobseeker_details %}
-        <h3>Job Seeker Details</h3>
-        <p>Resume: {{ user.jobseeker_details.title }}</p>
-        {% endif %}
-
-        <a href="{% url 'Dating:gridview' %}">Back to list</a>
-    </div>
-    </div>
     </div>
 </div>
 {% endblock content %}

@@ -1,46 +1,100 @@
 {% extends 'shared/base.html' %}
+
+{% block styles %}
+<style>
+    .upload-form {
+        margin-bottom: 40px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .gallery-container {
+        margin-top: 40px;
+    }
+    .gallery-container h2 {
+        margin-bottom: 20px;
+    }
+    .card img, .card video {
+        border-radius: 10px;
+    }
+    .card-body {
+        text-align: center;
+    }
+    .card-body small {
+        display: block;
+        margin-bottom: 10px;
+        color: #666;
+    }
+    .card-body form {
+        display: inline-block;
+    }
+    .gallery-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .gallery-item {
+        flex: 1 0 calc(33.333% - 15px);
+        margin-bottom: 15px;
+    }
+    @media (max-width: 768px) {
+        .gallery-item {
+            flex: 1 0 calc(50% - 15px);
+        }
+    }
+    @media (max-width: 576px) {
+        .gallery-item {
+            flex: 1 0 calc(100% - 15px);
+        }
+    }
+</style>
+{% endblock styles %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">
-        <div class="col-2">
+        <div class="col-md-2">
             {% include 'Dating/shared/side.html' %}
         </div>
-        <div class="col-10">
-            <h2>Upload Media</h2>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </form>
+        <div class="col-md-10">
+            <div class="upload-form">
+                <h2>Upload Media</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
 
             <!-- Gallery -->
-            <h2>Gallery</h2>
-            <div class="row">
-                {% for item in media %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        {% if item.media_type == 'image' %}
-                        <img src="{{ item.file.url }}" class="card-img-top" alt="Media Image">
-                        {% elif item.media_type == 'video' %}
-                        <video controls class="card-img-top">
-                            <source src="{{ item.file.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        {% endif %}
-                        <div class="card-body">
-                            <small class="text-muted">{{ item.timestamp }}</small>
-                            <form method="post" action="{% url 'Dating:media_delete' item.pk %}">
-                                {% csrf_token %}
-                                <button class="btn btn-danger" onclick="return confirm('Are you sure?')"
-                                    style="display:inline;">Delete</button>
-                            </form>
+            <div class="gallery-container">
+                <h2>Gallery</h2>
+                <div class="gallery-row">
+                    {% for item in media %}
+                    <div class="gallery-item">
+                        <div class="card">
+                            {% if item.media_type == 'image' %}
+                            <img src="{{ item.file.url }}" class="card-img-top" alt="Media Image">
+                            {% elif item.media_type == 'video' %}
+                            <video controls class="card-img-top">
+                                <source src="{{ item.file.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            {% endif %}
+                            <div class="card-body">
+                                <small class="text-muted">{{ item.timestamp }}</small>
+                                <form method="post" action="{% url 'Dating:media_delete' item.pk %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
-
 </div>
 {% endblock %}

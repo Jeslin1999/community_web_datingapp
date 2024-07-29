@@ -10,65 +10,116 @@
         width: 100%;
         height: auto;
         object-fit: cover;
+        border-radius: 5px 5px 0 0;
     }
 
     .card-title {
         font-size: 1.25rem;
         font-weight: bold;
+        margin-bottom: 0.5rem;
     }
 
     .card-text {
         font-size: 1rem;
+        color: #666;
+    }
+
+    .btn {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn:hover {
+        color: #ffffff;
+        background-color: rgb(248, 24, 27);
+    }
+
+    .btn-outline-danger {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-outline-danger:hover {
+        color: #ffffff;
+        background-color: #dc3545;
+    }
+
+    .form-control {
+        margin-bottom: 10px;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .col-md-3 {
+            flex: 1 0 calc(50% - 20px);
+            margin-bottom: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .col-md-3 {
+            flex: 1 0 100%;
+            margin-bottom: 20px;
+        }
     }
 </style>
-<div class="container mt-4">
+<div class="container mt-4 d-flex justify-content-center">
     <div class="row">
         <div class="col-2">
             {% include 'Dating/Shared/side.html' %}
         </div>
         <div class="col-10">
-            <a class="btn btn-primary" type="submit" href="{% url 'Dating:gridview' %}">All</a>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a class="btn btn-outline-danger" href="{% url 'Dating:gridview' %}">All</a>
+                <a class="btn btn-outline-danger" href="{% url 'Dating:locationgridview' %}">Location</a>
+                <a class="btn btn-outline-danger" href="{% url 'Dating:educationgridview' %}">Education</a>
+            </div>
 
-        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:locationgridview' %}">Location</a>
-
-        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:educationgridview' %}">Education</a>
-
-        <a class="btn btn-primary" type="submit"  href="">Profession</a>
             <form class="mt-3" method="get">
                 {% csrf_token %}
-                
-                <select name="location" class="form-control mb-2">
+                <select name="location" class="form-control">
                     <option value="">Select Location</option>
                     {% for user in users %}
                     <option value="{{ user.location }}">{{ user.location }}</option>
                     {% endfor %}
                 </select>
-                <button class="btn btn-primary" type="submit">Filter</button>
-               
+                <button class="btn btn-secondary" type="submit">Filter</button>
             </form>
-            <h1>Users by Location</h1>
-            <div class="row">
-                {% for user in users %}
-                <div class="col-md-3 user-card">
-                    <div class="card h-100">
-                        <a class="navbar-brand" href="{% url 'Dating:user_detail' user.id %}">
-                            {% if user.images %}
-                            <img src="{{ user.images.url }}" class="card-img-top" alt="">
-                            {% else %}
-                            <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top" alt="Default profile picture">
-                            {% endif %}
-                            <div class="card-body">
-                                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-                                <p class="card-text">{{ user.age }}</p>
-                                <p>{{ user.username }}</p>
-                            </div>
-                        </a>
+
+            <h1 class="mt-4">Users by Location</h1>
+            <div class="card p-4 w-100">
+                <div class="row">
+                    {% for user in users %}
+                    <div class="col-md-3 user-card">
+                        <div class="card h-100">
+                            <a class="navbar-brand" href="{% url 'Dating:user_detail' user.id %}">
+                                {% if user.images %}
+                                <img src="{{ user.images.url }}" class="card-img-top" alt="{{ user.first_name }} {{ user.last_name }}">
+                                {% else %}
+                                <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top" alt="Default profile picture">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                                    <p class="card-text">{{ user.age }}</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-                {% if users|length > 4 %}
-                <a href="{% url 'Dating:all_users' %}">See All</a>
-                {% endif %}
             </div>
         </div>
     </div>

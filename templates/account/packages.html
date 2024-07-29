@@ -1,0 +1,49 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Choose Your Plan</h1>
+    <div class="row mt-4">
+        <!-- Standard Plan -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Standard</h3>
+                </div>
+                <div class="card-body text-center">
+                    <h2>$10</h2>
+                    <p>Basic features</p>
+                    <a href="" class="btn btn-primary">Select</a>
+                </div>
+            </div>
+        </div>
+        <!-- Premium Plan -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Premium</h3>
+                </div>
+                <div class="card-body text-center">
+                    <h2>$20</h2>
+                    <p>All standard features plus more</p>
+                    <a href="" class="btn btn-success">Select</a>
+                </div>
+            </div>
+        </div>
+        <!-- Diamond Plan -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Diamond</h3>
+                </div>
+                <div class="card-body text-center">
+                    <h2>$30</h2>
+                    <p>All premium features plus exclusive access</p>
+                    <a href="" class="btn btn-warning">Select</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

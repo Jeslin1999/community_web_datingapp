@@ -1,17 +1,21 @@
-{% extends 'shared/basea.html' %}
+{% extends 'shared/base.html' %}
 
 {% block content %}
-  <h2>Enter Email</h2>
-  {% if messages %}
-    <ul>
+<div class="container mt-4 d-flex justify-content-center">
+  <div class="card p-4 w-50">
+    <h2 class="mb-4">Enter Email</h2>
+    {% if messages %}
+    <ul class="mb-4">
       {% for message in messages %}
-        <li>{{ message }}</li>
+      <li>{{ message }}</li>
       {% endfor %}
     </ul>
-  {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Send OTP</button>
-  </form>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-secondary">Send OTP</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

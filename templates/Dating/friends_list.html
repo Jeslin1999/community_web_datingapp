@@ -21,23 +21,28 @@
     .card-text {
         font-size: 1rem;
     }
+    .btn:hover {
+        color: #ffffff;
+        background-color: rgb(248, 24, 27)
+    }
+
 </style>
-<div class="container  mt-4">
+<div class="container  mt-4 ">
     <div class="row">
         <div class="col-2">
             {% include 'Dating/shared/side.html' %}
         </div>
     <div class="col-10">
 
-        <a class="btn btn-primary" type="submit" href="{% url 'Dating:gridview' %}">All</a>
+        <a class="btn border border-2 border-danger" type="submit" href="{% url 'Dating:gridview' %}">All</a>
 
-        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:locationgridview' %}">Location</a>
+        <a class="btn border border-2 border-danger" type="submit"  href="{% url 'Dating:locationgridview' %}">Location</a>
 
-        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:educationgridview' %}">Education</a>
+        <a class="btn border border-2 border-danger" type="submit"  href="{% url 'Dating:educationgridview' %}">Education</a>
 
-        <a class="btn btn-primary" type="submit"  href="">Profession</a>
+        <a class="btn border border-2 border-danger" type="submit"  href="">Profession</a>
 
-    
+        <div class="card p-4 w-100 w-md-50">
         <div class="row mt-2">
 
             {% for user in friends %}
@@ -50,24 +55,22 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
                             <p class="card-text">{{ user.age }}</p>
-                            <p> {{ user.username }}</p>
                         </div>
                     </a>
-                    <form method="post" action="">
+                    <form method="post" action="{% url 'Dating:send_remove' user.id %}">
                         {% csrf_token %}
                         <button class="btn btn-danger" onclick="return confirm('Are you sure?')"
                             style="display:inline;">Remove</button>
                     </form>
                 </div>
             </div>
+        </div>
             {% endfor %}
 
-            {% if friends|length > 4 %}
-
-            <a href="{% url 'Dating:all_users' %}">See All</a>
+            
 
         </div>
-        {% endif %}
+        
 
     </div>
 </div>
