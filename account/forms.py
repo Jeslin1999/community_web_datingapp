@@ -66,8 +66,8 @@ class UpdateForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control'}),
-            'interest': forms.Textarea(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'interest': forms.Textarea(attrs={'class': 'form-control','rows':3}),
             'qualification': forms.TextInput(attrs={'class': 'form-control'}),
             'rel_status': forms.Select(attrs={'class': 'form-control'}),
             'smoke': forms.Select(attrs={'class': 'form-control'}),
@@ -93,9 +93,20 @@ class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ['position', 'department', 'location']
+        widgets = {
+            'position' : forms.TextInput(attrs={'class': 'form-control'}),
+            'department' : forms.TextInput(attrs={'class': 'form-control'}),
+            'location' : forms.TextInput(attrs={'class': 'form-control'}),
+
+
+        }
 
 
 class JobseekerForm(forms.ModelForm):
     class Meta:
         model = Jobseeker
         fields = ['title','expertise_level']
+        widgets = {
+            'title' : forms.TextInput(attrs={'class': 'form-control'}),
+            'expertise_level' : forms.Select(attrs={'class': 'form-control'}),
+        }

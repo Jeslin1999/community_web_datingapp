@@ -19,13 +19,13 @@
         max-width: 75%;
     }
 
-    .message .sent .content {
+    .message.sent .content {
         background-color: #e1ffc7;
         margin-left: auto;
     }
 
-    .message .received .content {
-        background-color: #f1f0f0;
+    .message.received .content {
+        background-color: #e0eed3;
     }
 
     .message-form {
@@ -41,7 +41,7 @@
 </style>
 
 <div class="container mt-4">
-    <a class="btn btn-secondary" type="submit" href="{% url 'Dating:gridview' %}">Back</a>
+    <a class="btn btn-secondary" href="{% url 'Dating:gridview' %}">Back</a>
     <div class="row">
         <div class="col-md-12">
             <h2>Chat with {{ receiver.first_name }} {{ receiver.last_name }}</h2>
@@ -49,7 +49,7 @@
             <div class="message-container">
                 {% for message in messages %}
                 <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
-                    <div class="content" style="background-color: rgb(203, 207, 210);">
+                    <div class="content">
                         <p>{{ message.content }}</p>
                         <small class="text-muted">{{ message.timestamp }}</small>
                     </div>
@@ -62,7 +62,7 @@
             <form method="post" class="message-form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button class="btn btn-primary" type="submit">Send</button>
+                <button class="btn btn-success" type="submit">Send</button>
             </form>
         </div>
     </div>

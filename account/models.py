@@ -84,9 +84,15 @@ class Employee(models.Model):
         return f"{self.position}"
 
 class Jobseeker(models.Model):
+    expert = [
+        ('Beginner','Beginner'),
+        ('Intermediate','Intermediate'),
+        ('Advanced','Advanced'),
+        ('Expert','Expert')
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100,null=True, blank=True)
-    expertise_level = models.CharField(max_length=100)
+    expertise_level = models.CharField(max_length=15,choices=expert,default='Beginner')
 
     def __str__(self):
         return f"{self.expertise_level}"
