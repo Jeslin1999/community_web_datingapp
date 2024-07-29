@@ -1,0 +1,34 @@
+{% extends 'shared/basea.html' %}
+
+  
+
+{% block content %} 
+
+    <script>
+        function toggleForm(formType) {
+            document.getElementById('shortrelationship_form').style.display = formType === 'short' ? 'block' : 'none';
+            document.getElementById('longrelationship_form').style.display = formType === 'long' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+    <h1>Relationship</h1>
+    <button class="btn btn-success" onclick="toggleForm('short')">Short Term Relationship</button>
+    <button class="btn btn-success" onclick="" disabled>Long Term Relationship</button>
+
+    <div id="shortrelationship_form" style="display:none;">
+        <h2 class="text-danger mt-3">Short Term Relationship</h2>
+        Age You sure
+        <form method="post" action="{% url 'account:relationship' %}">
+            {% csrf_token %}
+            <button class="btn btn-secondary" type="submit" name="short_submit">Submit</button>
+        </form>
+    </div>
+
+    <div id="longrelationship_form" style="display:none;">
+        <h2>Long Term Relationship</h2>
+    </div>
+
+</div>
+{% endblock content %} 

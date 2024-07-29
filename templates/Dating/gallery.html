@@ -1,0 +1,46 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-2">
+            {% include 'Dating/shared/side.html' %}
+        </div>
+        <div class="col-10">
+            <h2>Upload Media</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+
+            <!-- Gallery -->
+            <h2>Gallery</h2>
+            <div class="row">
+                {% for item in media %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if item.media_type == 'image' %}
+                        <img src="{{ item.file.url }}" class="card-img-top" alt="Media Image">
+                        {% elif item.media_type == 'video' %}
+                        <video controls class="card-img-top">
+                            <source src="{{ item.file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        {% endif %}
+                        <div class="card-body">
+                            <small class="text-muted">{{ item.timestamp }}</small>
+                            <form method="post" action="{% url 'Dating:media_delete' item.pk %}">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" onclick="return confirm('Are you sure?')"
+                                    style="display:inline;">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

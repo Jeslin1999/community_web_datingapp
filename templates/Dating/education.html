@@ -1,0 +1,78 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .user-card {
+        margin-bottom: 20px;
+    }
+
+    .user-card img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        font-size: 1rem;
+    }
+</style>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-2">
+            {% include 'Dating/Shared/side.html' %}
+        </div>
+        <div class="col-10">
+            <a class="btn btn-primary" type="submit" href="{% url 'Dating:gridview' %}">All</a>
+
+        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:locationgridview' %}">Location</a>
+
+        <a class="btn btn-primary" type="submit"  href="{% url 'Dating:educationgridview' %}">Education</a>
+
+        <a class="btn btn-primary" type="submit"  href="">Profession</a>
+            <form class="mt-3" method="get">
+                {% csrf_token %}
+                
+                <select name="qualification" class="form-control mb-2">
+                    <option value="">Select Qualification</option>
+                    {% for user in users %}
+                    <option value="{{ user.qualification }}">{{ user.qualification }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-primary" type="submit">Filter</button>
+               
+            </form>
+
+            <h1>Users by Education</h1>
+            <div class="row">
+                {% for user in users %}
+                <div class="col-md-3 user-card">
+                    
+                    <div class="card h-100">
+                        <a class="navbar-brand" href="{% url 'Dating:user_detail' user.id %}">
+                            {% if user.images %}
+                            <img src="{{ user.images.url }}" class="card-img-top" alt="">
+                            {% else %}
+                            <img src="{% static 'images/default-profile.jpeg' %}" class="card-img-top" alt="Default profile picture">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                                <p class="card-text">{{ user.age }}</p>
+                                <p>{{ user.username }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if users|length > 4 %}
+                <a href="{% url 'Dating:all_users' %}">See All</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'shared/basea.html' %}
+
+{% block content %}
+  <h2>Enter Email</h2>
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send OTP</button>
+  </form>
+{% endblock %}

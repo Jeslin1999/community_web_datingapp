@@ -1,0 +1,110 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center text-center">
+        <p class="text-light fw-bolder" style="font-size: 70px;">Start Something Special</p>
+        <a href="{% url 'account:send_otp' %}"><button
+                class="px-4 py-2 mt-3 fw-bold fs-5 rounded-pill border-0 text-dark"
+                style="background-image: linear-gradient(180deg, #f6e66e, #fe817b);">Create profile</button></a>
+        <a href="{% url 'Dating:login' %}"><button class="px-4 py-2 mt-3 fw-bold fs-5 rounded-pill border-0 text-light"
+                style="background-image: linear-gradient(180deg, #f4443b, #fe817b);">Login</button></a>
+    </div>
+
+<div class="section">
+    <div class="container mt-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="about-img">
+                    <img class="about-img__is" src="https://www.deepikamatrimonial.com/asset/site/assets/images/frontend/about/63956c786a7b41670737016.png" alt="About Us">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ps-lg-3 ps-xl-5">
+                    <h2 class="left-heading mt-0">About Us</h2>
+                    <p class="section__para pt-3">
+                       dating app about hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+                       hhhhhhhhhhh
+                       hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+                       hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh <br><br>
+
+                        about
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section work-process-section mt-5 " style=" background-repeat: no-repeat; background-size: cover; background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLMcqsv9biS9aqoNqKhiYt0qr70cl4h8zWQQ&s)">
+    <div class="section__head">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-xl-6">
+                    <h2 class="mt-0 text-center">How It Work</h2>
+                    <p class="section__para mx-auto mb-0 text-center">
+                        This site facilitate to find your dream partner. There are some step to finding your best
+                        partner. If you wanna be a partner, or want to find your best partner, please follow the process
+                        as we suggested here.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <li></li>
+    </div>
+    <div class="container">
+        <div class="row gy-5 justify-content-center">
+            <div class="col-lg-4">
+                <div class="work-process">
+                    <div class="work-process__icon">
+                    </div>
+                    <div class="work-process__content">
+                        <h5 class="mt-0">
+                            Create Account
+                        </h5>
+                        <p class="mb-0">
+                            Click 'Sign Up' to create your account now! Fill in your details and start exploring our
+                            platform today.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="work-process">
+                    <div class="work-process__icon">
+                    </div>
+                    <div class="work-process__content">
+                        <h5 class="mt-0">
+                            Search Your Partner
+                        </h5>
+                        <p class="mb-0">
+                            Explore our matchmaking services to find your ideal partner. Customize your search criteria
+                            and discover compatible matches effortlessly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="work-process">
+                    <div class="work-process__icon">
+                        
+                    </div>
+                    <div class="work-process__content">
+                        <h5 class="mt-0">
+                            Start Communication
+                        </h5>
+                        <p class="mb-0">
+                            Initiate conversation with your matches today. Break the ice and build meaningful
+                            connections effortlessly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

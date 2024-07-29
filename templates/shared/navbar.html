@@ -1,0 +1,80 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .nav-link {
+        color: white !important;  
+        font-weight: bold;
+    }
+    .nav-link:hover {
+        color: #5a5f64 !important; 
+    }
+    
+    body {
+        background-color: rgb(232, 242, 239);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+</style>
+<header class="header-bottom">
+        <nav class="navbar navbar-light navbar-expand-sm bg-warning nav-link nav-link:hover">
+            <div class="container">
+            <a class="navbar-brand logo" href="{% url 'account:index' %}">Dating App</a>
+                            <button class="navbar-toggler header-button collapsed" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="las la-bars"></i>
+                </button>
+                        
+            <div class="navbar-collapse collapse" id="navbarSupportedContent" >
+                <ul class="navbar-nav nav-menu ms-auto">
+                    
+                                            <li class="nav-item">
+                        <a class="nav-link " href="{% url 'account:index' %}">Home</a>
+                    </li>
+                                        <li class="nav-item">
+                        <a class="nav-link " href="">Packages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{% url 'Dating:gridview' %}">Matches</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="">Contact</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item ">
+                        
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-2">
+                           
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Profile
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'account:profile' %}">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'Dating:gridview' %}">Dashboard</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'account:logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                       
+                    </li>
+                    {% endif %}   
+                
+                {% if not user.is_authenticated %}
+                            <li class="header-login__item nav-item">
+                                <a class="btn bg-danger btn--base btn--sm" href="{% url 'Dating:login' %}"> <i class="las la-user"></i> Login</a>
+                            </li>
+
+                            <li class="header-login__item nav-item">
+                                <a class="btn bg-light btn--base btn--sm btn--outline" href="{% url 'account:send_otp' %}"> Create Account</a>
+                            </li>
+                     </ul>
+                {% endif %}
+               
+            </div>
+        </div>
+        </nav>
+</header>
