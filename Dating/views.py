@@ -17,6 +17,7 @@ class GenderselectView(LoginRequiredMixin, FormView):
     template_name = 'Dating/selectgender.html'
     form_class = GenderselectForm
     success_url = reverse_lazy('Dating:gridview')
+
     def form_valid(self, form):
         genderselect, created = Genderselect.objects.update_or_create(
             user=self.request.user,
@@ -35,12 +36,12 @@ class LoginView(FormView):
         user = authenticate(self.request, username=username, password=password)
 
         if user is not None:
-                login(self.request, user)
-                gender_selection = Genderselect.objects.filter(user=self.request.user.id)
-                if gender_selection.exists():
-                    return redirect('Dating:gridview')
-                else:
-                    return redirect('Dating:selectgender') 
+            login(self.request, user)
+            gender_selection = Genderselect.objects.filter(user=self.request.user.id)
+            if gender_selection.exists():
+                return redirect('Dating:gridview')
+            else:
+                return redirect('Dating:selectgender') 
         else:
             return self.form_invalid(form) 
 
@@ -54,18 +55,18 @@ class Gridview(LoginRequiredMixin,ListView):
         gender_selection = Genderselect.objects.filter(user=self.request.user.id).first()
         excluded_users = Friendconnection.objects.filter(send_by=self.request.user, not_interest=True).values_list('send_to_id', flat=True)
         if gender_selection:
-                if gender_selection.genderselect == 'B':
-                    return User.objects.exclude(Q(id=self.request.user.id) | Q(id__in=excluded_users) | Q(is_staff=True))
+            if gender_selection.genderselect == 'B':
+                return User.objects.exclude(Q(id=self.request.user.id) | Q(id__in=excluded_users) | Q(is_staff=True))
 
-                elif gender_selection.genderselect == 'M':
-                    return User.objects.filter(gender='Male').exclude(Q(id=self.request.user.id) | Q(id__in=excluded_users) | Q(is_staff=True))
+            elif gender_selection.genderselect == 'M':
+                return User.objects.filter(gender='Male').exclude(Q(id=self.request.user.id) | Q(id__in=excluded_users) | Q(is_staff=True))
 
-                elif gender_selection.genderselect == 'F':
-                    return User.objects.filter(gender='Female').exclude(Q(id=self.request.user.id) | Q(id__in=excluded_users) | Q(is_staff=True))
+            elif gender_selection.genderselect == 'F':
+                return User.objects.filter(gender='Female').exclude(Q(id=self.request.user.id) | Q(id__in=excluded_users) | Q(is_staff=True))
                 
-                queryset = queryset.prefetch_related('employee', 'jobseeker')
+            queryset = queryset.prefetch_related('employee', 'jobseeker')
             
-                return queryset
+            return queryset
         
         return User.objects.none()
     
@@ -241,7 +242,7 @@ class AcceptRequestView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.status = True
         form.instance.save()
-        return redirect('Dating:user_detail', pk=self.request.user.id)
+        return redirect('Dating:friends_list', pk=self.request.user.id)
 
     def form_invalid(self, form):
         return redirect('Dating:accept_requests', pk=self.request.user.id)
