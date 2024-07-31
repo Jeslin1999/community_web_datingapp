@@ -26,25 +26,6 @@ class GenderselectView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
     
 
-class LoginView(FormView):
-    template_name = 'account/Login.html'
-    form_class = LoginForm
-
-    def form_valid(self, form):
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user = authenticate(self.request, username=username, password=password)
-
-        if user is not None:
-            login(self.request, user)
-            gender_selection = Genderselect.objects.filter(user=self.request.user.id)
-            if gender_selection.exists():
-                return redirect('Dating:gridview')
-            else:
-                return redirect('Dating:selectgender') 
-        else:
-            return self.form_invalid(form) 
-
 
 class Gridview(LoginRequiredMixin,ListView):
     model = User, Genderselect, Friendconnection

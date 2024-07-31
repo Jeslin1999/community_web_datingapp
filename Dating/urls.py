@@ -6,8 +6,7 @@ from django.conf.urls.static import static
 app_name = 'Dating'
 
 urlpatterns = [
-     path('selectgender/',GenderselectView.as_view(),name='selectgender'),
-    path('login/',LoginView.as_view(),name='login'),
+    path('selectgender/',GenderselectView.as_view(),name='selectgender'),
     path('gridview/',Gridview.as_view(),name='gridview'),
     path('locationgridview/',LocationGridview.as_view(),name='locationgridview'),
     path('educationgridview/',EducationGridview.as_view(),name='educationgridview'),

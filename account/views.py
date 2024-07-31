@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
-from .forms import EmailForm, UpdateForm, RegisterForm, OTPForm, EmployeeForm, JobseekerForm, ChangePasswordForm, ForgotEmailForm, ForgotPasswordForm
+from .forms import EmailForm, UpdateForm, RegisterForm, OTPForm, EmployeeForm, JobseekerForm,LoginForm, ChangePasswordForm, ForgotEmailForm, ForgotPasswordForm
 from django.views.generic import FormView, TemplateView, ListView, CreateView, UpdateView, DeleteView
 from .models import User, EmailOTP, Relationship, Employee ,Jobseeker,Forgotpassword
+from Dating.models import Genderselect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
@@ -156,12 +157,33 @@ class ProfileDeleteView(LoginRequiredMixin, View):
         else:
             return redirect('account:profile')
         
+
+
+class LoginView(FormView):
+    template_name = 'account/Login.html'
+    form_class = LoginForm
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(self.request, username=username, password=password)
+
+        if user is not None:
+            login(self.request, user)
+            gender_selection = Genderselect.objects.filter(user=self.request.user.id)
+            if gender_selection.exists():
+                return redirect('Dating:gridview')
+            else:
+                return redirect('Dating:selectgender') 
+        else:
+            return self.form_invalid(form) 
+        
         
 class LogoutView(TemplateView):
    def get(self, request, *args, **kwargs):
         logout(request)
         request.session.flush()
-        return redirect(reverse_lazy('Dating:login'))
+        return redirect(reverse_lazy('account:login'))
    
 
 class PaymentOptionsView(TemplateView):
@@ -194,7 +216,7 @@ def verify_password(request):
                 user.set_password(new_password)
                 user.save()
                 Forgotpassword.objects.filter(email=email).update(is_verified=True)
-                return redirect('Dating:login')
+                return redirect('account:login')
             
             except User.DoesNotExist:
                 return redirect('account:forgot_password')
@@ -215,7 +237,7 @@ def change_password(request):
                 user = User.objects.get(username=username)
                 user.set_password(new_password)
                 user.save()
-                return redirect('Dating:login')
+                return redirect('account:login')
             except User.DoesNotExist:
                 messages.error(request, 'User does not exist.')
             return redirect('account:change_password')
