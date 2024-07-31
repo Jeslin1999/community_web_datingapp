@@ -1,5 +1,5 @@
 from django.db import models
-import random
+import random, string
 from django.contrib.auth.models import AbstractUser
 import datetime
 
@@ -67,6 +67,20 @@ class EmailOTP(models.Model):
 
     def generate_otp(self):
         self.otp = str(random.randint(100000, 999999))
+        self.save()
+
+    def __str__(self):
+        return self.email
+    
+
+class Forgotpassword(models.Model):
+    email = models.EmailField(unique=False)
+    new_password = models.CharField(max_length=6, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+
+    def generate_password(self):
+        characters = string.ascii_letters + string.digits
+        self.new_password = ''.join(random.choices(characters, k=8))
         self.save()
 
     def __str__(self):

@@ -26,8 +26,10 @@
                 data-bs-toggle="collapse" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <i class="las la-bars"></i>
-            </button>
-
+            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {% if user.is_authenticated %}
+            <h2> Hi.. {{ user.first_name }}</h2>
+            {% endif%}
             <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav nav-menu ms-auto">
 
@@ -58,6 +60,10 @@
                                     <li><a class="dropdown-item" href="{% url 'account:profile' %}">Profile</a>
                                     </li>
                                     <li><a class="dropdown-item" href="{% url 'Dating:gridview' %}">Dashboard</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'account:change_password' %}">Change password</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>

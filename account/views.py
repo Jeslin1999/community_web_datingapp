@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
-from .forms import EmailForm, UpdateForm, RegisterForm, OTPForm, EmployeeForm, JobseekerForm
+from .forms import EmailForm, UpdateForm, RegisterForm, OTPForm, EmployeeForm, JobseekerForm, ChangePasswordForm, ForgotEmailForm, ForgotPasswordForm
 from django.views.generic import FormView, TemplateView, ListView, CreateView, UpdateView, DeleteView
-from .models import User, EmailOTP, Relationship, Employee ,Jobseeker
+from .models import User, EmailOTP, Relationship, Employee ,Jobseeker,Forgotpassword
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.contrib import messages
-from .utils import send_otp_via_email
+from .utils import send_otp_via_email, send_password_via_email
 
 
 def index(request):
@@ -166,5 +166,57 @@ class LogoutView(TemplateView):
 
 class PaymentOptionsView(TemplateView):
     template_name = 'account/packages.html'
+
+
+def forgotpassword(request):
+    if request.method == 'POST':
+        form = ForgotEmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            email_password, created = Forgotpassword.objects.get_or_create(email=email)
+            email_password.generate_password()
+            send_password_via_email(email_password.email, email_password.new_password)
+            return redirect('account:change_password')
+    else:
+        form = ForgotEmailForm()
+    return render(request, 'account/forgot_password.html', {'form': form})
+
+
+# def verify_password(request):
+#     if request.method == 'POST':
+#         form = ForgotPasswordForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             new_password = form.cleaned_data['new_password']
+#             try:
+#                 email_password = Forgotpassword.objects.get(email=email, new_password=new_password)
+#                 email_password.is_verified = True
+#                 email_password.save()
+#                 return redirect('account:change_password')
+            
+#             except Forgotpassword.DoesNotExist:
+#                 messages.error(request, 'Invalid password.')
+#     else:
+#         form = ForgotPasswordForm()
+#     return render(request, 'account/new_password.html', {'form': form})
+
+ 
+def change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            new_password = form.cleaned_data['new_password']
+            try:
+                user = User.objects.get(username=username)
+                user.set_password(new_password)
+                user.save()
+                return redirect('Dating:login')
+            except User.DoesNotExist:
+                messages.error(request, 'User does not exist.')
+            return redirect('account:change_password')
+    else:
+        form = ChangePasswordForm()
+    return render(request, 'account/change_password.html', {'form': form})
     
         

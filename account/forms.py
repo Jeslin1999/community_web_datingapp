@@ -1,7 +1,7 @@
 from django.forms import *
 from django import forms
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-from .models import Employee, Jobseeker, User, EmailOTP
+from .models import Employee, Jobseeker, User, EmailOTP, Forgotpassword
 
 
 class LoginForm(AuthenticationForm):
@@ -110,3 +110,22 @@ class JobseekerForm(forms.ModelForm):
             'title' : forms.TextInput(attrs={'class': 'form-control'}),
             'expertise_level' : forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+class ForgotEmailForm(forms.ModelForm):
+    class Meta:
+        model = Forgotpassword
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'Enter email'}),
+        }
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(required=True)
+    new_password = forms.CharField(required=True)
+
+
+class ChangePasswordForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    new_password = forms.CharField(widget=forms.PasswordInput())

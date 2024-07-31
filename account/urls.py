@@ -19,6 +19,11 @@ urlpatterns = [
     path('profile/delete/<int:id>/',ProfileDeleteView.as_view(),name='profile_delete'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('packages/', PaymentOptionsView.as_view(), name='packages'),
+    path('change_password/', change_password, name='change_password'),
+    path('forgot_password/', forgotpassword, name='forgot_password'),
+    # path('verify_password/', verify_password, name='verify_password'),
+
+
     
 
 ]
