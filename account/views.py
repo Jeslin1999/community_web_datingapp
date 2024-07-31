@@ -176,31 +176,35 @@ def forgotpassword(request):
             email_password, created = Forgotpassword.objects.get_or_create(email=email)
             email_password.generate_password()
             send_password_via_email(email_password.email, email_password.new_password)
-            return redirect('account:change_password')
+            return redirect('account:verify_password')
     else:
         form = ForgotEmailForm()
     return render(request, 'account/forgot_password.html', {'form': form})
 
 
-# def verify_password(request):
-#     if request.method == 'POST':
-#         form = ForgotPasswordForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             new_password = form.cleaned_data['new_password']
-#             try:
-#                 email_password = Forgotpassword.objects.get(email=email, new_password=new_password)
-#                 email_password.is_verified = True
-#                 email_password.save()
-#                 return redirect('account:change_password')
+def verify_password(request):
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            new_password = form.cleaned_data['new_password']
             
-#             except Forgotpassword.DoesNotExist:
-#                 messages.error(request, 'Invalid password.')
-#     else:
-#         form = ForgotPasswordForm()
-#     return render(request, 'account/new_password.html', {'form': form})
+            try:
+                user = User.objects.get(email=email)
+                user.set_password(new_password)
+                user.save()
+                Forgotpassword.objects.filter(email=email).update(is_verified=True)
+                return redirect('Dating:login')
+            
+            except User.DoesNotExist:
+                return redirect('account:forgot_password')
+    else:
+        form = ForgotPasswordForm()
+    
+    return render(request, 'account/new_password.html', {'form': form})
 
- 
+
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)

@@ -21,7 +21,7 @@ urlpatterns = [
     path('packages/', PaymentOptionsView.as_view(), name='packages'),
     path('change_password/', change_password, name='change_password'),
     path('forgot_password/', forgotpassword, name='forgot_password'),
-    # path('verify_password/', verify_password, name='verify_password'),
+    path('verify_password/', verify_password, name='verify_password'),
 
 
     
